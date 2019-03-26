@@ -5,43 +5,7 @@ import java.util.*;
 
 public class LeoLinkedList implements List<Integer> {
     private LinkedList1 root=null;
-    public static void main(String args[]){
-        LeoLinkedList leo=new LeoLinkedList();
-        leo.add(5);
-        leo.add(6);leo.add(7);
-        Object o=7;
-        leo.remove(o);
-        System.out.println("The size is:"+leo.size());
-        System.out.println("Is the List is empty,gives: "+leo.isEmpty());
-        System.out.println("the index of the given element is: "+leo.indexOf(5));
-        System.out.println("the integer at given index is: "+leo.get(2));
-        System.out.println("It is "+leo.contains(5)+" that it contains given object");
-        ArrayList<Integer> arrList = new ArrayList<>(2);
-        arrList.add(5);
-        System.out.println("it is "+leo.containsAll(arrList)+" it contain all collection elements:");
-        System.out.println();
-        System.out.println("it is "+leo.addAll(arrList)+" that all elements are added to collection elements:");
-        System.out.println();
-        System.out.println("it is "+leo.addAll(2,arrList)+" that all elements are added to collection elements:");
-        leo.print();
-        System.out.println();
-        arrList.add(5);
-        arrList.add(5);
-        System.out.println("it is "+leo.removeAll(arrList)+" that collection elements are removed:");
-        leo.print();
-        System.out.println();
-        System.out.println("the last index is: "+leo.lastIndexOf(leo.toArray()));
-        System.out.println();
-        leo.printArray(leo.toArray());
-        leo.print();
-        System.out.println();
-        leo.set(1,9);
-        leo.add(1,1);
-        leo.print();
-        leo.remove(2);
-        leo.print();
 
-    }
     @Override
     public int size() {
         LinkedList1 node=root;
@@ -72,7 +36,10 @@ public class LeoLinkedList implements List<Integer> {
 
     @Override
     public Iterator<Integer> iterator() {
-        MyIterator myIterator=new MyIterator(size(),intArray());
+        if(size()>0){
+        MyIterator myIterator=new MyIterator(size(),intArray(),0);
+        return myIterator;
+        }
         return null;
     }
 
@@ -207,6 +174,24 @@ public class LeoLinkedList implements List<Integer> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
+        LinkedList1 node=root;
+        Object[] tempArray =c.toArray();
+        int itr=0;
+        if(size()>0) {
+            while (node != null) {
+                for (int j = 0; j < tempArray.length; j++) {
+                    if (node.val == tempArray[j]) {
+                        itr++;
+                    }
+                }
+                if (itr == 0) {
+                    remove(node);
+                }
+                node = node.next;
+            }
+            return true;
+        }
+
         return false;
     }
 
@@ -324,11 +309,27 @@ public class LeoLinkedList implements List<Integer> {
 
     @Override
     public ListIterator<Integer> listIterator() {
+        if (size()>0){
+            MyIterator myIterator=new MyIterator(size(),intArray(),0);
+        }
         return null;
     }
 
     @Override
     public ListIterator<Integer> listIterator(int index) {
+        LinkedList1 node=root;
+        if (index<size()){
+            int[] listArray=new int[size()-index-1];
+            for (int i=1,itr=0;i<=size();i++){
+                if(i>=size()-index) {
+                    listArray[itr] =node.val;
+                    itr++;
+                }
+                node=node.next;
+            }
+            MyIterator myIterator=new MyIterator(size()-index,listArray,index-1);
+            return myIterator;
+        }
         return null;
     }
 
@@ -343,6 +344,7 @@ public class LeoLinkedList implements List<Integer> {
                     subList.add(node.val);
                 }
                 itr++;
+                node=node.next;
             }
             return subList;
         }
