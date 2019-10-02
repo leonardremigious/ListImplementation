@@ -10,4 +10,5 @@ public class Stackrunner {
         System.out.println(run.elementAt(0));
         System.out.println(run.elementAt(2));
     }
+
 }
